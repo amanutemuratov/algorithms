@@ -7,43 +7,47 @@ public class SegmentTree {
 
     private SegmentTree left;
     private SegmentTree right;
-    private int sum;
-    private int tl, tr;
+    private int value;
+    private int leftBound, rightBound;
 
-    public SegmentTree(int arr[]) {
-        new SegmentTree(arr, 0, arr.length-1);
-    }
-
-    public SegmentTree(int arr[], int tl, int tr) {
-        this.tl = tl;
-        this.tr = tr;
-        if (tl==tr) {
-            sum = arr[tl];
+    public SegmentTree(int arr[], int leftBound, int rightBound) {
+        this.leftBound = leftBound;
+        this.rightBound = rightBound;
+        if (leftBound == rightBound) {
+            value = arr[leftBound];
             return;
         }
-        int mid = (tl + tr) / 2;
-        left = new SegmentTree(arr, tl, mid);
-        right = new SegmentTree(arr, mid + 1, tr);
-        sum = left.getSum() + right.getSum();
+        int mid = (leftBound + rightBound) / 2;
+        left = new SegmentTree(arr, leftBound, mid);
+        right = new SegmentTree(arr, mid + 1, rightBound);
+        value = rangeValue();
     }
 
-    public int getSum() {
-        return sum;
+    public int getRangeValue(int l, int r) {
+        if (rightBound < l || leftBound > r) return 0;
+        if (l <= leftBound && rightBound <= r) return value;
+        return left.getRangeValue(l, r) + right.getRangeValue(l, r);
     }
 
-    public int getRangeSum(int l, int r) {
-        if (tl>=l && r<=tr) {
-            return sum;
-        }
-        int leftSum = 0;
-        if (left!=null) {
-            leftSum = left.getSum();
+    public void update(int pos, int val) {
+        if (leftBound == rightBound) {
+            value = val;
+            return;
         }
 
-        int rightSum = 0;
-        if (right!=null) {
-            rightSum = right.getSum();
-        }
-        return leftSum + rightSum;
+        int mid = (leftBound + rightBound) / 2;
+
+        if (pos <= mid) left.update(pos, val);
+        else right.update(pos, val);
+
+        value = rangeValue();
+    }
+
+    private int getValue() {
+        return value;
+    }
+
+    public int rangeValue() {
+        return left.getValue() + right.getValue();
     }
 }
