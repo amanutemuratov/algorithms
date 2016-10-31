@@ -53,4 +53,34 @@ public class SegmentTreeTest {
         int afterUpdateValue = segmentTree.getRangeValue(pos, pos);
         assertEquals(afterUpdateValue, newVal);
     }
+
+    @Test
+    public void updateRange() throws Exception {
+        //given
+        int incValue = 2;
+
+        int beforeUpdateValue = segmentTree.getRangeValue(0, arr.length - 1);
+
+        segmentTree.update(0, arr.length-1, incValue);
+        int afterUpdateValue = segmentTree.getRangeValue(0, arr.length-1);
+        //actual
+
+        //then
+        assertEquals(beforeUpdateValue+(arr.length*incValue), afterUpdateValue);
+    }
+
+    @Test
+    public void updatePosition() throws Exception {
+        //given
+        int incValue = 2;
+
+        int beforeUpdateValue = segmentTree.getRangeValue(0, arr.length - 1);
+
+        segmentTree.update(0, 0, incValue);
+        //actual
+        int afterUpdateValue = segmentTree.getRangeValue(0, arr.length-1);
+
+        //then
+        assertEquals(beforeUpdateValue+(1*incValue), afterUpdateValue);
+    }
 }
