@@ -1,8 +1,5 @@
 package dataStructure;
 
-/**
- * Created by Aman on 10/27/2016.
- */
 public class SegmentTree {
 
     private SegmentTree leftNode;

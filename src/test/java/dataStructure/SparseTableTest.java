@@ -68,4 +68,32 @@ public class SparseTableTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void getMinInRangeLeftCorner() throws Exception {
+        //given
+        int left = 0;
+        int right = 1;
+        int expected = getExpectedMinimum(left, right);
+
+        //when
+        int actual = sparseTable.getMinInRange(left, right);
+
+        //then
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void getMinInRangeRightCorner() throws Exception {
+        //given
+        int left = arr.length-1;
+        int right = arr.length;
+        int expected = getExpectedMinimum(left, right);
+
+        //when
+        int actual = sparseTable.getMinInRange(left, right);
+
+        //then
+        assertEquals(expected, actual);
+    }
+
 }
