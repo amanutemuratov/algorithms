@@ -1,0 +1,86 @@
+class Solution {
+    int d[];
+    public int networkDelayTime(int[][] times, int N, int K) {
+        d = new int[N+1];
+        int inf = (int)1e9;
+        Arrays.fill(d, inf);
+        
+        HashMap<Integer, Integer > edges[] = new HashMap[N+1];
+        for (int i=1; i<=N; i++) {
+            edges[i] = new HashMap<>();
+        }
+        
+        for (int i=0; i<times.length; i++) {
+            int u = times[i][0];
+            int v = times[i][1];
+            int w = times[i][2];
+            edges[u].put(v, w);
+        }
+        
+        d[K] = 0;
+    
+        PriorityQueue<Pair> q = new PriorityQueue<>();
+        q.add(new Pair(0, K));
+        
+        while (!q.isEmpty()) {
+            Pair p = q.poll();
+            int v = p.y;
+            if (p.x > d[v]) continue;
+            
+            for (Map.Entry<Integer, Integer> e: edges[v].entrySet()) {
+                int len = e.getValue();
+                int u = e.getKey();
+                // System.out.println("v: " + v + " u: " + u + " len: " + len);
+                if (d[v] + len < d[u]) {
+                    d[u] = d[v] + len;
+                    q.add(new Pair (d[u], u));
+                }
+            }
+        }
+        
+        int ans = 0;
+        for (int i=1; i<=N; i++) {
+            // System.out.println(i + " " + d[i]);
+            ans = Math.max(d[i],ans);
+        }
+        
+        if (ans==inf) return -1;
+        return ans;
+    }
+    
+    class Pair implements Comparable<Pair> {
+        int x;
+        int y;
+        public Pair (int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Pair pair = (Pair) o;
+            return x == pair.x &&
+                    y == pair.y;
+        }
+
+        @Override
+        public int hashCode() {
+
+            return Objects.hash(x, y);
+        }
+
+        @Override
+        public int compareTo(Pair p) {
+            if (this.y>p.y) {
+                return 1;
+            } else if(this.y == p.y) {
+                return 0;
+            } else {
+                return -1;
+            }
+        }
+    }
+    
+}
